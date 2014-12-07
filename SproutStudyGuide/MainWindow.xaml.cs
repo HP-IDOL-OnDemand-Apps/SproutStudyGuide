@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +14,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.ServiceModel.Web;
+using System.Web;
+using Newtonsoft.Json;
 
 namespace SproutStudyGuide
 {
@@ -121,6 +128,45 @@ namespace SproutStudyGuide
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void Debug_Click(object sender, RoutedEventArgs e)
+        {
+            var response = HttpGet(
+                "https://api.idolondemand.com/1/api/sync/querytextindex/v1?text=Dog&database_match=wiki_eng&apikey=7353dd9f-f651-4025-8713-572be5771178");
+
+            JsonTextReader reader = new JsonTextReader(new StringReader(response));
+            while (reader.Read())
+            {
+                if (reader.Value != null)
+                {
+                    var tempStr = String.Format("Token: {0}, Value: {1}", reader.TokenType, reader.Value);
+                    Console.WriteLine(tempStr);
+                    //DebugTextBox.Text += tempStr + '\n';
+                }
+                else
+                {
+                    var tempStr = String.Format("Token: {0}", reader.TokenType);
+                    Console.WriteLine(tempStr);
+                    //DebugTextBox.Text += tempStr + '\n';
+                }
+            }
+            DebugTextBox.Text = response;
+        }
+
+        static string HttpGet(string url)
+        {
+            HttpWebRequest req = WebRequest.Create(url)
+                                 as HttpWebRequest;
+            string result = null;
+            using (HttpWebResponse resp = req.GetResponse()
+                                          as HttpWebResponse)
+            {
+                StreamReader reader =
+                    new StreamReader(resp.GetResponseStream());
+                result = reader.ReadToEnd();
+            }
+            return result;
         }
     }
 }

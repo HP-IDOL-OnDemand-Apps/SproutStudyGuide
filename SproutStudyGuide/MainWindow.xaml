@@ -26,9 +26,9 @@
     </Window.Resources>
     <Grid Background="#FF3C97CB">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="25*"/>
             <ColumnDefinition Width="50*"/>
-            <ColumnDefinition Width="33*"/>
+            <ColumnDefinition Width="25*"/>
         </Grid.ColumnDefinitions>
         <Border BorderBrush="Black" BorderThickness="0,0,1,0">
             <Grid x:Name="GridLeft" Grid.Column="0">
@@ -74,13 +74,15 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <!--<Label Content="RightContent" VerticalAlignment="Top" HorizontalAlignment="Center"/>-->
-                    <Button Content="Send to mat" Margin="0" VerticalAlignment="Top" Click="PerformTrackingCapture_Click" Grid.Row="0" Height="50"/>
+                    <Button Content="Send to mat" Margin="0" VerticalAlignment="Top" Click="PerformTrackingCapture_Click" Grid.Row="0" Height="50" Background="{x:Null}"/>
 
-                    <Button Content="Segmentation" Margin="0" VerticalAlignment="Top" Click="PerformTrackingCapture_Click" Grid.Row="1" Height="50"/>
-                    <Button Content="OCR" Margin="0" VerticalAlignment="Center" Click="PerformOCRCapture_Click" Height="50" Grid.Row="2"/>
-                    <Button Content="Exit" Margin="0" BorderThickness="1" Background="White" Click="Exit_Click" Height="50" Grid.Row="3" VerticalAlignment="Bottom"/>
+                    <Button Content="Segmentation" Margin="0" VerticalAlignment="Top" Click="PerformTrackingCapture_Click" Grid.Row="1" Height="50" Background="{x:Null}"/>
+                    <Button Content="OCR" Margin="0" VerticalAlignment="Center" Click="PerformOCRCapture_Click" Height="50" Grid.Row="2" Background="{x:Null}"/>
+                    <Button Content="Debug" Margin="0" BorderThickness="1" Background="{x:Null}" Click="Debug_Click" Height="50" Grid.Row="3"/>
+                    <Button Content="Exit" Margin="0" BorderThickness="1" Background="White" Click="Exit_Click" Height="50" Grid.Row="4" VerticalAlignment="Bottom"/>
 
                 </Grid>
             </Border>
