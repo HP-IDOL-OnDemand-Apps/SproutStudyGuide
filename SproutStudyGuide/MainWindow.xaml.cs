@@ -29,7 +29,25 @@ namespace SproutStudyGuide
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        WpfCsSample.CodeSampleControls.TrackingHandler.HorizontalWindow horizontalWindow;
+        private WpfCsSample.CodeSampleControls.TrackingHandler.TrackingHandlerMatControl thmControl;
+        public WpfCsSample.CodeSampleControls.TrackingHandler.HorizontalWindow horizontalWindow { 
+            get
+            {
+                return thmControl.HorizontalWindow;
+            }
+        }
+
+        private bool isNotBusy = true;
+        public bool IsNotBusy
+        {
+            get { return isNotBusy; }
+
+            set
+            {
+                isNotBusy = value;
+                OnPropertyChanged("IsNotBusy");
+            }
+        }
 
         private List<WikiObject> documentsList = new List<WikiObject>();
         public List<WikiObject> DocumentsList
@@ -80,6 +98,10 @@ namespace SproutStudyGuide
         {
             InitializeComponent();
             DocumentsListView.DataContext = this;
+            btnOCR.DataContext = this;
+            btnSendToMat.DataContext = this;
+            btnScan.DataContext = this;
+            btnSearch.DataContext = this;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -161,9 +183,10 @@ namespace SproutStudyGuide
 
         private void PerformTrackingCapture_Click(object sender, RoutedEventArgs e)
         {
+            this.IsNotBusy = false;
             using (new WaitCursor())
             {
-                WpfCsSample.CodeSampleControls.TrackingHandler.TrackingHandlerMatControl thmControl =
+                thmControl =
                     new WpfCsSample.CodeSampleControls.TrackingHandler.TrackingHandlerMatControl();
                 thmControl.mainWindow = this;
                 thmControl.PerformCapture_Click(sender, e);
@@ -172,6 +195,7 @@ namespace SproutStudyGuide
 
         private void PerformOCRCapture_Click(object sender, RoutedEventArgs e)
         {
+            this.IsNotBusy = false;
             using (new WaitCursor())
             {
                 WpfCsSample.CodeSampleControls.OCR.OCRMatControl ocrControl =
@@ -195,6 +219,7 @@ namespace SproutStudyGuide
 
         private void Debug_Click(object sender, RoutedEventArgs e)
         {
+            //this.IsNotBusy = false;
             using (new WaitCursor())
             {
                 var response = HttpGet(

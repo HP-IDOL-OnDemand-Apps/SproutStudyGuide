@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 using System.Threading;
 using System.Collections.ObjectModel;
 using HP.PC.Presentation;
+using SproutStudyGuide;
 
 
 namespace WpfCsSample.CodeSampleControls.TrackingHandler
@@ -26,6 +27,10 @@ namespace WpfCsSample.CodeSampleControls.TrackingHandler
         IPcSpecification spec;
 
         private HorizontalWindow horizontalWindow = new HorizontalWindow();
+        public HorizontalWindow HorizontalWindow {
+            get { return horizontalWindow; }
+            set { horizontalWindow = value; }
+        }
 
         private Timer _timer;
         private DateTime _trackingTimeStamp;
@@ -121,6 +126,7 @@ namespace WpfCsSample.CodeSampleControls.TrackingHandler
                                 horizontalWindow.GridMat.Children.Add(img);
                             }
                             mainWindow.GridRightTop.Children.Add(new Image { Source = picture.Image });
+                            this.mainWindow.IsNotBusy = true;
 
                             this.StartButton.Opacity = 100;
                             this.CaptureButton.Content = "Recapture";

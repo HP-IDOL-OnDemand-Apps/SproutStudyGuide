@@ -94,18 +94,17 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <!--<Label Content="RightContent" VerticalAlignment="Top" HorizontalAlignment="Center"/>-->
-                    <Button Content="Send to mat" Margin="0" VerticalAlignment="Top" Click="SendToMat_Click" Grid.Row="0" Height="75" Background="#FF3C97CB"/>
-
-                    <Button Content="Segmentation" Margin="0" VerticalAlignment="Top" Click="PerformTrackingCapture_Click" Grid.Row="1" Height="75" Background="#FF3C97CB"/>
-                    <Button Content="OCR" Margin="0" VerticalAlignment="Center" Click="PerformOCRCapture_Click" Height="75" Grid.Row="2" Background="#FF3C97CB"/>
-                    <Button Content="Debug" Margin="0" BorderThickness="1" Background="#FF3C97CB" Click="Debug_Click" Height="75" Grid.Row="3"/>
+                    <Button Name="btnSendToMat" Content="Send to mat" Margin="0" VerticalAlignment="Top" Click="SendToMat_Click" Grid.Row="0" Height="75" Background="#FF3C97CB" IsEnabled="{Binding IsNotBusy}"/>
+                    <Button Name="btnScan" Content="Scan" Margin="0" VerticalAlignment="Top" Click="PerformTrackingCapture_Click" Grid.Row="1" Height="75" Background="#FF3C97CB" IsEnabled="{Binding IsNotBusy}"/>
+                    <Button Name="btnOCR" Content="OCR" Margin="0" VerticalAlignment="Center" Click="PerformOCRCapture_Click" Height="75" Grid.Row="2" Background="#FF3C97CB" IsEnabled="{Binding IsNotBusy}"/>
+                    <Button Name="btnSearch" Content="Search" Margin="0" BorderThickness="1" Background="#FF3C97CB" Click="Debug_Click" Height="75" Grid.Row="3" IsEnabled="{Binding IsNotBusy}"/>
                     <Button Content="Exit" Margin="0" BorderThickness="1" Background="White" Click="Exit_Click" Height="50" Grid.Row="4" VerticalAlignment="Bottom"/>
 
                 </Grid>
             </Border>
 
         </Grid>
-        <TextBox x:Name="DebugTextBox" Grid.Column="1" TextWrapping="Wrap" Text="Debug" VerticalAlignment="Bottom" AcceptsReturn="True" IsReadOnlyCaretVisible="True"/>
+        <TextBox x:Name="DebugTextBox" Grid.Column="1" TextWrapping="Wrap" Text="OCR" VerticalAlignment="Bottom" AcceptsReturn="True" IsReadOnlyCaretVisible="True"/>
 
     </Grid>
 </Window>

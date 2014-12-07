@@ -121,6 +121,7 @@ namespace WpfCsSample.CodeSampleControls.OCR
                             }
 
                             mainWindow.GridRightTop.Children.Add(new Image { Source = picture.Image });
+                            this.mainWindow.IsNotBusy = true;
 
                             DebugTextBox.Text = "";
                             foreach (var item in DataContext.ItemCollection)
