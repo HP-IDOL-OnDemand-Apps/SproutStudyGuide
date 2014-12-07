@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,19 +20,66 @@ using System.Runtime.Serialization.Json;
 using System.ServiceModel.Web;
 using System.Web;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace SproutStudyGuide
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         WpfCsSample.CodeSampleControls.TrackingHandler.HorizontalWindow horizontalWindow;
+
+        private List<WikiObject> documentsList = new List<WikiObject>();
+        public List<WikiObject> DocumentsList
+        {
+            get { return documentsList; }
+
+            set
+            {
+                documentsList = value;
+                OnPropertyChanged("DocumentsList");
+            }
+        }
+
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            var propertyChanged = PropertyChanged;
+            if (propertyChanged != null)
+            {
+                propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public class WaitCursor : IDisposable
+        {
+            private Cursor _previousCursor;
+
+            public WaitCursor()
+            {
+                _previousCursor = Mouse.OverrideCursor;
+
+                Mouse.OverrideCursor = Cursors.Wait;
+            }
+
+            #region IDisposable Members
+
+            public void Dispose()
+            {
+                Mouse.OverrideCursor = _previousCursor;
+            }
+
+            #endregion
+        }
+
 
         public MainWindow()
         {
             InitializeComponent();
+            DocumentsListView.DataContext = this;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -113,45 +161,100 @@ namespace SproutStudyGuide
 
         private void PerformTrackingCapture_Click(object sender, RoutedEventArgs e)
         {
-            WpfCsSample.CodeSampleControls.TrackingHandler.TrackingHandlerMatControl thmControl = new WpfCsSample.CodeSampleControls.TrackingHandler.TrackingHandlerMatControl();
-            thmControl.mainWindow = this;
-            thmControl.PerformCapture_Click(sender, e);
+            using (new WaitCursor())
+            {
+                WpfCsSample.CodeSampleControls.TrackingHandler.TrackingHandlerMatControl thmControl =
+                    new WpfCsSample.CodeSampleControls.TrackingHandler.TrackingHandlerMatControl();
+                thmControl.mainWindow = this;
+                thmControl.PerformCapture_Click(sender, e);
+            }
         }
 
         private void PerformOCRCapture_Click(object sender, RoutedEventArgs e)
         {
-            WpfCsSample.CodeSampleControls.OCR.OCRMatControl ocrControl = new WpfCsSample.CodeSampleControls.OCR.OCRMatControl();
-            ocrControl.DebugTextBox = this.DebugTextBox;
-            ocrControl.mainWindow = this;
-            ocrControl.PerformCapture_Click(sender, e);
+            using (new WaitCursor())
+            {
+                WpfCsSample.CodeSampleControls.OCR.OCRMatControl ocrControl =
+                    new WpfCsSample.CodeSampleControls.OCR.OCRMatControl();
+                ocrControl.DebugTextBox = this.DebugTextBox;
+                ocrControl.mainWindow = this;
+                ocrControl.PerformCapture_Click(sender, e);
+            }
         }
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
 
+        public class WikiObject
+        {
+            public string reference { get; set; }
+            public string weight { get; set; }
+            public string title { get; set; }
+        }
+
         private void Debug_Click(object sender, RoutedEventArgs e)
         {
-            var response = HttpGet(
-                "https://api.idolondemand.com/1/api/sync/querytextindex/v1?text=Dog&database_match=wiki_eng&apikey=7353dd9f-f651-4025-8713-572be5771178");
-
-            JsonTextReader reader = new JsonTextReader(new StringReader(response));
-            while (reader.Read())
+            using (new WaitCursor())
             {
-                if (reader.Value != null)
+                var response = HttpGet(
+                    "https://api.idolondemand.com/1/api/sync/findsimilar/v1?text=" + DebugTextBox.Text +
+                    "&indexes=wiki_eng&summary=off&apikey=7353dd9f-f651-4025-8713-572be5771178");
+
+                JsonTextReader reader = new JsonTextReader(new StringReader(response));
+                while (reader.Read())
                 {
-                    var tempStr = String.Format("Token: {0}, Value: {1}", reader.TokenType, reader.Value);
-                    Console.WriteLine(tempStr);
-                    //DebugTextBox.Text += tempStr + '\n';
+                    if (reader.Value != null)
+                    {
+                        var tempStr = String.Format("Token: {0}, Value: {1}", reader.TokenType, reader.Value);
+                        Console.WriteLine(tempStr);
+                        //DebugTextBox.Text += tempStr + '\n';
+                    }
+                    else
+                    {
+                        var tempStr = String.Format("Token: {0}", reader.TokenType);
+                        Console.WriteLine(tempStr);
+                        //DebugTextBox.Text += tempStr + '\n';
+                    }
                 }
-                else
+
+                //DebugTextBox.Text = response;
+
+                JObject o = JObject.Parse(response);
+                JArray documentsArray = (JArray) o["documents"];
+                IList<WikiObject> documents = documentsArray.Select(c => new WikiObject
                 {
-                    var tempStr = String.Format("Token: {0}", reader.TokenType);
-                    Console.WriteLine(tempStr);
-                    //DebugTextBox.Text += tempStr + '\n';
-                }
+                    reference = c.Value<string>("reference"),
+                    weight = c.Value<string>("weight"),
+                    title = c.Value<string>("title"),
+                }).ToList();
+
+                DocumentsList = documents.ToList();
+
+
+                //foreach (var item in DocumentsList)
+                //{
+
+                //}
             }
-            DebugTextBox.Text = response;
+        }
+
+        private void Link_Click(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock linkTextBlock = sender as TextBlock;
+            string uri = linkTextBlock.Text;
+
+            WebBrowser browser = new WebBrowser();
+            browser.Navigate(new Uri(uri));
+            GridCenter.Children.Add(browser);
+        }
+
+        private void SendToMat_Click(object sender, RoutedEventArgs e)
+        {
+            WebBrowser element = GridCenter.Children[0] as WebBrowser;
+            GridCenter.Children.Remove(element);
+            element.IsManipulationEnabled = true;
+            horizontalWindow.GridMat.Children.Add(element);
         }
 
         static string HttpGet(string url)
