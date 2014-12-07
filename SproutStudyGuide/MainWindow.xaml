@@ -7,9 +7,9 @@
         WindowStyle="None" ResizeMode="NoResize"  
         WindowStartupLocation="CenterScreen" WindowState="Maximized"
         Loaded="Window_Loaded"
-        xmlns:trackingHandler="clr-namespace:WpfCsSample.CodeSampleControls.TrackingHandler"
+        
         mc:Ignorable="d" 
-        d:DataContext="{d:DesignInstance Type=trackingHandler:TrackingHandlerViewModel,IsDesignTimeCreatable=True}"
+        d:DataContext="MainWindow"
         ManipulationStarting="Window_ManipulationStarting"
         ManipulationDelta="Window_ManipulationDelta"
         ManipulationInertiaStarting="Window_InertiaStarting">
@@ -30,7 +30,7 @@
             <ColumnDefinition Width="33*"/>
             <ColumnDefinition Width="33*"/>
         </Grid.ColumnDefinitions>
-        <Grid x:Name="GridLeft" HorizontalAlignment="Center" Grid.Column="0">
+        <Grid x:Name="GridLeft" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -42,7 +42,7 @@
                 <Label Content="LeftContent" VerticalAlignment="Top" HorizontalAlignment="Center"/>
             </Grid>
         </Grid>
-        <Grid x:Name="GridCenter" HorizontalAlignment="Center" Grid.Column="1">
+        <Grid x:Name="GridCenter" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -54,21 +54,28 @@
                 <Label Content="CenterContent" VerticalAlignment="Top" HorizontalAlignment="Center"/>
             </Grid>
         </Grid>
-        <Grid x:Name="GridRight" HorizontalAlignment="Center" Grid.Column="2">
+        <Grid x:Name="GridRight" Grid.Column="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
             </Grid.RowDefinitions>
-            <Grid x:Name="GridRightHeader" VerticalAlignment="Top" Grid.Row="0">
-                <Label Content="Right" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-            </Grid>
-            <Grid x:Name="GridRightContent" Grid.Row="1">
-                <Label Content="RightContent" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-            </Grid>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0">
+                <Grid x:Name="GridRightTop" VerticalAlignment="Center">
+                    <!--<Label Content="Right" VerticalAlignment="Top" HorizontalAlignment="Center"/>-->
+                    <Label Content="Mat" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="-1"/>
+                </Grid>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1">
+                <Grid x:Name="GridRightBottom" VerticalAlignment="Center">
+                    <!--<Label Content="RightContent" VerticalAlignment="Top" HorizontalAlignment="Center"/>-->
+                </Grid>
+            </Border>
+            
         </Grid>
-        <Button Content="Segmentation" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" Click="PerformTrackingCapture_Click" Grid.Row="1" Height="50" Width="100"/>
-        <Button Content="OCR" Grid.Column="2" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Bottom" Width="100" Click="PerformOCRCapture_Click" Height="50" Grid.Row="1"/>
-        <Button Content="Exit" Grid.Column="2" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" BorderThickness="0" Background="White" Click="Exit_Click" Width="50" Height="50"/>
+        <Button Content="Segmentation" Grid.Column="2" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center" Click="PerformTrackingCapture_Click" Grid.Row="1" Height="50" Width="100"/>
+        <Button Content="OCR" Grid.Column="2" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="100" Click="PerformOCRCapture_Click" Height="50" Grid.Row="1"/>
+        <Button Content="Exit" Grid.Column="2" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" BorderThickness="1" Background="White" Click="Exit_Click" Width="50" Height="50"/>
         <TextBox x:Name="DebugTextBox" Grid.Column="1" TextWrapping="Wrap" Text="Debug" VerticalAlignment="Bottom" AcceptsReturn="True" IsReadOnlyCaretVisible="True"/>
+        
     </Grid>
 </Window>

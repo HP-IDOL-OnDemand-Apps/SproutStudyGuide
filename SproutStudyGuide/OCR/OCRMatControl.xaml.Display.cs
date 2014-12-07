@@ -13,6 +13,7 @@ namespace WpfCsSample.CodeSampleControls.OCR
     // from the moment.
     partial class OCRMatControl: UserControl//, ICodeSampleControl
     {
+        public SproutStudyGuide.MainWindow mainWindow { get; set; }
         public TextBox DebugTextBox { get; set; }
         public int Order { get { return 11; } }
         public string Title { get { return "Text Extraction"; } }
@@ -118,14 +119,16 @@ namespace WpfCsSample.CodeSampleControls.OCR
 
                                 DataContext.ItemCollection.Add(capText);
                             }
+
+                            mainWindow.GridRightTop.Children.Add(new Image { Source = picture.Image });
+
+                            DebugTextBox.Text = "";
+                            foreach (var item in DataContext.ItemCollection)
+                            {
+                                DebugTextBox.Text += item.Text;
+                            }
                         }
                     }
-                }
-
-                DebugTextBox.Text = "";
-                foreach (var item in DataContext.ItemCollection)
-                {
-                    DebugTextBox.Text += item.Text;
                 }
             }
             catch (Exception sdkError)

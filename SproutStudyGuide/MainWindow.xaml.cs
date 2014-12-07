@@ -107,6 +107,7 @@ namespace SproutStudyGuide
         private void PerformTrackingCapture_Click(object sender, RoutedEventArgs e)
         {
             WpfCsSample.CodeSampleControls.TrackingHandler.TrackingHandlerMatControl thmControl = new WpfCsSample.CodeSampleControls.TrackingHandler.TrackingHandlerMatControl();
+            thmControl.mainWindow = this;
             thmControl.PerformCapture_Click(sender, e);
         }
 
@@ -114,6 +115,7 @@ namespace SproutStudyGuide
         {
             WpfCsSample.CodeSampleControls.OCR.OCRMatControl ocrControl = new WpfCsSample.CodeSampleControls.OCR.OCRMatControl();
             ocrControl.DebugTextBox = this.DebugTextBox;
+            ocrControl.mainWindow = this;
             ocrControl.PerformCapture_Click(sender, e);
         }
         private void Exit_Click(object sender, RoutedEventArgs e)

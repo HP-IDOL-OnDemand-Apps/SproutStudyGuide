@@ -16,6 +16,7 @@ namespace WpfCsSample.CodeSampleControls.TrackingHandler
 {
     partial class TrackingHandlerMatControl: UserControl//, ICodeSampleControl
     {
+        public SproutStudyGuide.MainWindow mainWindow { get; set; }
         public int Order { get { return 13; } }
         public string Title { get { return "Object Tracking"; } }
         public string Description { get { return "This sample demonstrates how to track 2D objects. Place one or more 2D objects such as postcards or photographs on the touch mat, and then tap Capture. Edit the object names, and then tap Start. Move the objects on and above the mat to observe object tracking. Tap Stop to stop object tracking."; } }
@@ -116,10 +117,11 @@ namespace WpfCsSample.CodeSampleControls.TrackingHandler
                                 //cv.RenderTransform = new ScaleTransform(item.OutlineScale.X, item.OutlineScale.Y, item.Boundary.X, item.Boundary.Y);
                                 //cv.Children.Add(img);
 
-
+                                //horizontalWindow.GridMat.Children.Add(new Image {Source = picture.Image});
                                 horizontalWindow.GridMat.Children.Add(img);
                             }
-                            
+                            mainWindow.GridRightTop.Children.Add(new Image { Source = picture.Image });
+
                             this.StartButton.Opacity = 100;
                             this.CaptureButton.Content = "Recapture";
                             this.StartButton.IsEnabled = true;
