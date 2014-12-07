@@ -1,0 +1,28 @@
+﻿<Window x:Class="WpfCsSample.CodeSampleControls.TrackingHandler.HorizontalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:trackingHandler="clr-namespace:WpfCsSample.CodeSampleControls.TrackingHandler"
+        mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance Type=trackingHandler:TrackingHandlerViewModel,IsDesignTimeCreatable=True}"
+        Title="Horizontal (Mat) Window" WindowStyle="None" ShowInTaskbar="True"
+        ManipulationStarting="Window_ManipulationStarting"
+        ManipulationDelta="Window_ManipulationDelta"
+        ManipulationInertiaStarting="Window_InertiaStarting">
+    <Window.Resources>
+
+        <!--The movement, rotation, and size of the Rectangle is 
+        specified by its RenderTransform.-->
+        <MatrixTransform x:Key="InitialMatrixTransform">
+            <MatrixTransform.Matrix>
+                <Matrix OffsetX="200" OffsetY="200"/>
+            </MatrixTransform.Matrix>
+        </MatrixTransform>
+
+    </Window.Resources>
+    
+    <Grid Name="GridMat">
+        
+    </Grid>
+</Window>

@@ -1,0 +1,74 @@
+﻿<Window x:Class="SproutStudyGuide.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        Title="MainWindow" 
+        WindowStyle="None" ResizeMode="NoResize"  
+        WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Loaded="Window_Loaded"
+        xmlns:trackingHandler="clr-namespace:WpfCsSample.CodeSampleControls.TrackingHandler"
+        mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance Type=trackingHandler:TrackingHandlerViewModel,IsDesignTimeCreatable=True}"
+        ManipulationStarting="Window_ManipulationStarting"
+        ManipulationDelta="Window_ManipulationDelta"
+        ManipulationInertiaStarting="Window_InertiaStarting">
+    <Window.Resources>
+
+        <!--The movement, rotation, and size of the Rectangle is 
+        specified by its RenderTransform.-->
+        <MatrixTransform x:Key="InitialMatrixTransform">
+            <MatrixTransform.Matrix>
+                <Matrix OffsetX="200" OffsetY="200"/>
+            </MatrixTransform.Matrix>
+        </MatrixTransform>
+
+    </Window.Resources>
+    <Grid Background="#FF3C97CB">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="33*"/>
+            <ColumnDefinition Width="33*"/>
+            <ColumnDefinition Width="33*"/>
+        </Grid.ColumnDefinitions>
+        <Grid x:Name="GridLeft" HorizontalAlignment="Center" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="GridLeftHeader" VerticalAlignment="Top" Grid.Row="0">
+                <Label Content="Left" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid x:Name="GridLeftContent" Grid.Row="1">
+                <Label Content="LeftContent" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            </Grid>
+        </Grid>
+        <Grid x:Name="GridCenter" HorizontalAlignment="Center" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="GridCenterHeader" VerticalAlignment="Top" Grid.Row="0">
+                <Label Content="Center" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid x:Name="GridCenterContent" Grid.Row="1">
+                <Label Content="CenterContent" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            </Grid>
+        </Grid>
+        <Grid x:Name="GridRight" HorizontalAlignment="Center" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="GridRightHeader" VerticalAlignment="Top" Grid.Row="0">
+                <Label Content="Right" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid x:Name="GridRightContent" Grid.Row="1">
+                <Label Content="RightContent" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            </Grid>
+        </Grid>
+        <Button Content="Segmentation" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" Click="PerformTrackingCapture_Click" Grid.Row="1" Height="50" Width="100"/>
+        <Button Content="OCR" Grid.Column="2" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Bottom" Width="100" Click="PerformOCRCapture_Click" Height="50" Grid.Row="1"/>
+        <Button Content="Exit" Grid.Column="2" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" BorderThickness="0" Background="White" Click="Exit_Click" Width="50" Height="50"/>
+        <TextBox x:Name="DebugTextBox" Grid.Column="1" TextWrapping="Wrap" Text="Debug" VerticalAlignment="Bottom" AcceptsReturn="True" IsReadOnlyCaretVisible="True"/>
+    </Grid>
+</Window>
